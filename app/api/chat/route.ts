@@ -1,4 +1,4 @@
-import { model, modelID } from "@/ai/providers";
+import { getLanguageModel, modelID } from "@/ai/providers";
 import { weatherTool } from "@/ai/tools";
 import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
 
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   }: { messages: UIMessage[]; selectedModel: modelID } = await req.json();
 
   const result = streamText({
-    model: model.languageModel(selectedModel),
+    model: getLanguageModel(selectedModel),
     system: "You are a helpful assistant.",
     messages: convertToModelMessages(messages),
     stopWhen: stepCountIs(5), // enable multi-step agentic flow

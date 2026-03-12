@@ -1,5 +1,6 @@
 "use client";
-import { modelID, MODELS } from "@/ai/providers";
+import { modelID } from "@/ai/providers";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -18,6 +19,21 @@ export const ModelPicker = ({
   selectedModel,
   setSelectedModel,
 }: ModelPickerProps) => {
+  const [models, setModels] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/api/models")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.models?.length > 0) {
+          setModels(data.models);
+        }
+      })
+      .catch(() => {
+        // silently fail — user can still type or the default remains
+      });
+  }, []);
+
   return (
     <div className="absolute bottom-2 left-2 flex flex-col gap-2">
       <Select value={selectedModel} onValueChange={setSelectedModel}>
@@ -26,7 +42,7 @@ export const ModelPicker = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {MODELS.map((modelId) => (
+            {models.map((modelId) => (
               <SelectItem key={modelId} value={modelId}>
                 {modelId}
               </SelectItem>
