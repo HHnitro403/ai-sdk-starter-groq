@@ -4,7 +4,7 @@ import { extractReasoningMiddleware, wrapLanguageModel } from "ai";
 // Model IDs that use reasoning/chain-of-thought middleware
 const REASONING_MODEL_PREFIXES = ["deepseek-r1", "deepseek-r2", "qwq"];
 
-function isReasoningModel(modelId: string): boolean {
+export function isReasoningModel(modelId: string): boolean {
   return REASONING_MODEL_PREFIXES.some((prefix) => modelId.startsWith(prefix));
 }
 
