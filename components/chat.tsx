@@ -59,7 +59,6 @@ export default function Chat({
       const title =
         firstUserMsg?.parts
           ?.find((p) => p.type === "text")
-          // @ts-expect-error text part has a text field
           ?.text?.slice(0, 60) ?? "New Chat";
 
       db.chats.put({
