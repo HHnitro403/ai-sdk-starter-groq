@@ -5,7 +5,7 @@ import { Sidebar } from "./sidebar";
 import Chat from "./chat";
 import { SettingsPanel } from "./settings-panel";
 import { db } from "@/lib/db";
-import { useSettings, loadSettings } from "@/lib/settings";
+import { loadSettings } from "@/lib/settings";
 import type { modelID } from "@/ai/providers";
 import type { UIMessage } from "ai";
 
@@ -16,7 +16,6 @@ interface ChatSession {
 }
 
 export function AppShell() {
-  const { settings } = useSettings();
   const [session, setSession] = useState<ChatSession>(() => ({
     id: crypto.randomUUID(),
     initialModel: loadSettings().defaultModel as modelID,
