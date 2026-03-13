@@ -48,6 +48,7 @@ export function AppShell() {
         initialModel={session.initialModel}
         sidebarOpen={sidebarOpen}
         onToggleSidebar={() => setSidebarOpen((v) => !v)}
+        onNewChat={handleNewChat}
       />
     </div>
   );

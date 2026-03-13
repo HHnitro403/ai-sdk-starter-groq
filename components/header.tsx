@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { GroqIcon } from "./icons";
 import { useTheme } from "next-themes";
-import { Sun, Moon, PanelLeft } from "lucide-react";
+import { Sun, Moon, PanelLeft, SquarePen } from "lucide-react";
 
 interface HeaderProps {
   sidebarOpen?: boolean;
   onToggleSidebar?: () => void;
+  onNewChat?: () => void;
 }
 
-export const Header = ({ sidebarOpen, onToggleSidebar }: HeaderProps) => {
+export const Header = ({ sidebarOpen, onToggleSidebar, onNewChat }: HeaderProps) => {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
@@ -88,6 +89,15 @@ export const Header = ({ sidebarOpen, onToggleSidebar }: HeaderProps) => {
           >
             {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
+          {onNewChat && (
+            <button
+              onClick={onNewChat}
+              className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              title="New chat"
+            >
+              <SquarePen size={18} />
+            </button>
+          )}
         </div>
       </div>
     </div>
