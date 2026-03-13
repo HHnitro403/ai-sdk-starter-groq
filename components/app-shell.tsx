@@ -5,7 +5,7 @@ import { Sidebar } from "./sidebar";
 import Chat from "./chat";
 import { SettingsPanel } from "./settings-panel";
 import { db } from "@/lib/db";
-import { useSettings } from "@/lib/settings";
+import { useSettings, loadSettings } from "@/lib/settings";
 import type { modelID } from "@/ai/providers";
 import type { UIMessage } from "ai";
 
@@ -19,12 +19,13 @@ export function AppShell() {
   const { settings } = useSettings();
   const [session, setSession] = useState<ChatSession>(() => ({
     id: crypto.randomUUID(),
+    initialModel: loadSettings().defaultModel as modelID,
   }));
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleNewChat = () => {
-    setSession({ id: crypto.randomUUID(), initialModel: settings.defaultModel as modelID });
+    setSession({ id: crypto.randomUUID(), initialModel: loadSettings().defaultModel as modelID });
   };
 
   const handleSelectChat = async (id: string) => {
