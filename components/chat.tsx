@@ -34,6 +34,7 @@ export default function Chat({
   const [selectedModel, setSelectedModel] = useState<modelID>(
     initialModel ?? defaultModel
   );
+  const [attachedImages, setAttachedImages] = useState<string[]>([]);
   const createdAt = useRef<number>(Date.now());
   const hasNewActivity = useRef(false);
 
@@ -91,8 +92,13 @@ export default function Chat({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          sendMessage({ text: input }, { body: { selectedModel } });
+          if (!input.trim() && attachedImages.length === 0) return;
+          sendMessage(
+            { text: input },
+            { body: { selectedModel, images: attachedImages } },
+          );
           setInput("");
+          setAttachedImages([]);
         }}
         className="pb-8 bg-white dark:bg-zinc-950 w-full max-w-xl mx-auto px-4 sm:px-0"
       >
@@ -104,6 +110,8 @@ export default function Chat({
           isLoading={isLoading}
           status={status}
           stop={stop}
+          attachedImages={attachedImages}
+          onImagesChange={setAttachedImages}
         />
       </form>
     </div>
