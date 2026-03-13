@@ -1,12 +1,32 @@
+"use client";
+
 import Link from "next/link";
 import { GroqIcon } from "./icons";
+import { useTheme } from "next-themes";
+import { Sun, Moon, PanelLeft } from "lucide-react";
 
-export const Header = () => {
+interface HeaderProps {
+  sidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
+}
+
+export const Header = ({ sidebarOpen, onToggleSidebar }: HeaderProps) => {
+  const { resolvedTheme, setTheme } = useTheme();
+
   return (
-    <div className="fixed right-0 left-0 w-full top-0 bg-white dark:bg-zinc-950">
+    <div className="fixed right-0 left-0 w-full top-0 bg-white dark:bg-zinc-950 z-10">
       <div className="flex justify-between items-center p-4">
-        <div className="flex flex-row items-center gap-2 shrink-0 ">
-          <span className="jsx-e3e12cc6f9ad5a71 flex flex-row items-center gap-2 home-links">
+        <div className="flex flex-row items-center gap-2 shrink-0">
+          {onToggleSidebar && (
+            <button
+              onClick={onToggleSidebar}
+              className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors mr-1"
+              title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+            >
+              <PanelLeft size={18} />
+            </button>
+          )}
+          <span className="flex flex-row items-center gap-2">
             <Link
               className="text-zinc-800 dark:text-zinc-100 -translate-y-[.5px]"
               rel="noopener"
@@ -29,7 +49,7 @@ export const Header = () => {
                 />
               </svg>
             </Link>
-            <div className="jsx-e3e12cc6f9ad5a71 w-4 text-lg text-center text-zinc-300 dark:text-zinc-600">
+            <div className="w-4 text-lg text-center text-zinc-300 dark:text-zinc-600">
               <svg
                 data-testid="geist-icon"
                 height={16}
@@ -46,12 +66,29 @@ export const Header = () => {
                 />
               </svg>
             </div>
-            <div className="jsx-e3e12cc6f9ad5a71 flex flex-row items-center gap-4">
-              <Link className="flex flex-row items-end gap-2" target="_blank" href="https://groq.com">
+            <div className="flex flex-row items-center gap-4">
+              <Link
+                className="flex flex-row items-end gap-2"
+                target="_blank"
+                href="https://groq.com"
+              >
                 <GroqIcon size={32} />
               </Link>
             </div>
           </span>
+        </div>
+
+        <div className="flex flex-row items-center gap-2 shrink-0">
+          <button
+            onClick={() =>
+              setTheme(resolvedTheme === "dark" ? "light" : "dark")
+            }
+            className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            title="Toggle theme"
+          >
+            {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <DeployButton />
         </div>
       </div>
     </div>
