@@ -70,10 +70,22 @@ export function Sidebar({ currentChatId, onSelectChat, onNewChat }: SidebarProps
     }
   };
 
-  const deleteChat = async (id: string, e: React.MouseEvent) => {
+  const deleteChat = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    await db.chats.delete(id);
-    if (id === currentChatId) onNewChat();
+    toast("Delete this chat?", {
+      position: "top-center",
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          await db.chats.delete(id);
+          if (id === currentChatId) onNewChat();
+        },
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => {},
+      },
+    });
   };
 
   return (
