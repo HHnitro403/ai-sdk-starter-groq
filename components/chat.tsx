@@ -18,6 +18,7 @@ interface ChatProps {
   sidebarOpen: boolean;
   onToggleSidebar: () => void;
   onNewChat: () => void;
+  onOpenSettings: () => void;
 }
 
 export default function Chat({
@@ -27,6 +28,7 @@ export default function Chat({
   sidebarOpen,
   onToggleSidebar,
   onNewChat,
+  onOpenSettings,
 }: ChatProps) {
   const [input, setInput] = useState("");
   const [selectedModel, setSelectedModel] = useState<modelID>(
@@ -78,7 +80,7 @@ export default function Chat({
 
   return (
     <div className="flex-1 h-dvh flex flex-col justify-center w-full min-w-0">
-      <Header sidebarOpen={sidebarOpen} onToggleSidebar={onToggleSidebar} onNewChat={onNewChat} />
+      <Header sidebarOpen={sidebarOpen} onToggleSidebar={onToggleSidebar} onNewChat={onNewChat} onOpenSettings={onOpenSettings} />
       {messages.length === 0 ? (
         <div className="max-w-xl mx-auto w-full">
           <ProjectOverview />

@@ -21,7 +21,15 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: getLanguageModel(selectedModel),
-    system: "You are a helpful assistant.",
+    system: `You are a helpful and accurate assistant.
+
+When answering questions about current events, recent news, real-time data (prices, scores, weather), specific facts about people or places, or anything you are not fully certain about — always use the webSearch tool before responding. Do not guess or fabricate information.
+
+When you use web search:
+- Prefer the synthesised "answer" field for a reliable summary.
+- Cross-reference the top results to confirm facts.
+- Always cite your sources by including the relevant URLs in your response.
+- If results are conflicting or unclear, say so rather than picking one at random.`,
     messages: convertToModelMessages(messages),
     stopWhen: stepCountIs(5), // enable multi-step agentic flow
     tools,
