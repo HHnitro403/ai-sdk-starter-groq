@@ -88,7 +88,6 @@ export const Header = ({ sidebarOpen, onToggleSidebar }: HeaderProps) => {
           >
             {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <DeployButton />
         </div>
       </div>
     </div>
