@@ -1,3 +1,5 @@
+import { categorizeModels } from "@/lib/models";
+
 export async function GET() {
   const apiKey = process.env.GROQ_API_KEY;
 
@@ -6,9 +8,7 @@ export async function GET() {
   }
 
   const response = await fetch("https://api.groq.com/openai/v1/models", {
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-    },
+    headers: { Authorization: `Bearer ${apiKey}` },
   });
 
   if (!response.ok) {
@@ -20,16 +20,10 @@ export async function GET() {
 
   const data = await response.json();
 
-  // Filter to only chat/language models — exclude audio, TTS, and transcription models
-  const chatModels: string[] = data.data
-    .filter(
-      (m: { id: string; context_window?: number; active?: boolean }) =>
-        m.active !== false &&
-        m.context_window != null &&
-        m.context_window > 0,
-    )
-    .map((m: { id: string }) => m.id)
+  const allIds: string[] = (data.data as { id: string; active?: boolean }[])
+    .filter((m) => m.active !== false)
+    .map((m) => m.id)
     .sort();
 
-  return Response.json({ models: chatModels });
+  return Response.json({ categories: categorizeModels(allIds) });
 }

@@ -7,6 +7,13 @@ import { db, type StoredChat } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { toast } from "sonner";
 import { useSettings } from "@/lib/settings";
+import type { CategorizedModels } from "@/lib/models";
+
+// Only chat-relevant categories for the default model picker
+const CHAT_CATEGORIES: { key: keyof CategorizedModels; label: string }[] = [
+  { key: "text", label: "Text" },
+  { key: "vision", label: "Vision" },
+];
 
 interface SettingsPanelProps {
   open: boolean;
@@ -18,13 +25,13 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const { settings, update } = useSettings();
   const importRef = useRef<HTMLInputElement>(null);
   const chats = useLiveQuery(() => db.chats.toArray());
-  const [models, setModels] = useState<string[]>([]);
+  const [categories, setCategories] = useState<CategorizedModels | null>(null);
 
   useEffect(() => {
     fetch("/api/models")
       .then((res) => res.json())
       .then((data) => {
-        if (data.models?.length) setModels(data.models);
+        if (data.categories) setCategories(data.categories);
       })
       .catch(() => {});
   }, []);
@@ -129,16 +136,23 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               onChange={(e) => update({ defaultModel: e.target.value })}
               className="w-full text-sm px-3 py-2 rounded-md border border-border bg-white dark:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-ring"
             >
-              {models.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-              {models.length === 0 && (
-                <option value={settings.defaultModel}>
-                  {settings.defaultModel}
-                </option>
-              )}
+              {categories
+                ? CHAT_CATEGORIES.filter(
+                    (c) => categories[c.key].length > 0,
+                  ).map(({ key, label }) => (
+                    <optgroup key={key} label={label}>
+                      {categories[key].map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))
+                : (
+                    <option value={settings.defaultModel}>
+                      {settings.defaultModel}
+                    </option>
+                  )}
             </select>
             <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1.5">
               Applied when starting new chats.
