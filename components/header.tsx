@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { DeployButton } from "./deploy-button";
 import { GroqIcon } from "./icons";
 import { useTheme } from "next-themes";
 import { Sun, Moon, PanelLeft } from "lucide-react";
