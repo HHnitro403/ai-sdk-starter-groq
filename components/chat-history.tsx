@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db, type StoredChat } from "@/lib/db";
-import { X, Trash2, Pencil, Check, Bot } from "lucide-react";
+import { X, Trash2, Pencil, Bot } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -106,7 +106,7 @@ export function ChatHistory({
     e.stopPropagation();
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) { next.delete(id); } else { next.add(id); }
       return next;
     });
   };
