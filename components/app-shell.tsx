@@ -5,10 +5,11 @@ import { Sidebar } from "./sidebar";
 import Chat from "./chat";
 import { db } from "@/lib/db";
 import type { modelID } from "@/ai/providers";
+import type { UIMessage } from "ai";
 
 interface ChatSession {
   id: string;
-  initialMessages?: unknown[];
+  initialMessages?: UIMessage[];
   initialModel?: modelID;
 }
 
@@ -26,7 +27,7 @@ export function AppShell() {
     const chat = await db.chats.get(id);
     setSession({
       id,
-      initialMessages: chat?.messages,
+      initialMessages: chat?.messages as UIMessage[],
       initialModel: chat?.model,
     });
   };

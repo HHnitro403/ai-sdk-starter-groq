@@ -1,5 +1,6 @@
 import Dexie, { type Table } from "dexie";
 import type { modelID } from "@/ai/providers";
+import type { UIMessage } from "ai";
 
 export interface StoredChat {
   id: string;
@@ -7,8 +8,7 @@ export interface StoredChat {
   createdAt: number;
   updatedAt: number;
   model: modelID;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  messages: any[];
+  messages: UIMessage[];
 }
 
 class ChatDatabase extends Dexie {

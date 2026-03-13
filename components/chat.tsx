@@ -2,6 +2,7 @@
 
 import { defaultModel, modelID } from "@/ai/providers";
 import { useChat } from "@ai-sdk/react";
+import type { UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
@@ -12,7 +13,7 @@ import { db } from "@/lib/db";
 
 interface ChatProps {
   chatId: string;
-  initialMessages?: unknown[];
+  initialMessages?: UIMessage[];
   initialModel?: modelID;
   sidebarOpen: boolean;
   onToggleSidebar: () => void;
@@ -33,8 +34,7 @@ export default function Chat({
   const hasNewActivity = useRef(false);
 
   const { sendMessage, messages, status, stop } = useChat({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    initialMessages: initialMessages as any,
+    messages: initialMessages,
     onError: (error) => {
       toast.error(
         error.message.length > 0
@@ -56,10 +56,11 @@ export default function Chat({
       hasNewActivity.current = false;
 
       const firstUserMsg = messages.find((m) => m.role === "user");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const title = (firstUserMsg?.parts as any[])?.find(
-        (p) => p.type === "text"
-      )?.text?.slice(0, 60) ?? "New Chat";
+      const title =
+        firstUserMsg?.parts
+          ?.find((p) => p.type === "text")
+          // @ts-expect-error text part has a text field
+          ?.text?.slice(0, 60) ?? "New Chat";
 
       db.chats.put({
         id: chatId,
