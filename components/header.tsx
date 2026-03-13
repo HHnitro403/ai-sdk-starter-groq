@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { DeployButton } from "./deploy-button";
 import { GroqIcon } from "./icons";
 
 export const Header = () => {
@@ -53,9 +52,6 @@ export const Header = () => {
               </Link>
             </div>
           </span>
-        </div>
-        <div className="flex flex-row items-center gap-2 shrink-0">
-          <DeployButton />
         </div>
       </div>
     </div>
